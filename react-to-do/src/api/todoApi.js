@@ -1,5 +1,5 @@
 async function fetchTodoApi(endpoint = "", option) {
-  const baseUrl = "http://localhost:5000/api";
+  const baseUrl = "http://localhost:5000/api/";
   const defaultOption = {
     method: "GET", // *GET, POST, PUT, DELETE, etc.
     mode: "cors", // no-cors, *cors, same-origin

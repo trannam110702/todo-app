@@ -1,10 +1,12 @@
 const fs = require("fs");
-const todos = require("./todos.json");
+const path = require("path");
 
 const getAll = () => {
+  const todos = JSON.parse(fs.readFileSync("./src/database/todos.json", "utf8"));
   return todos;
 };
 const add = (data) => {
+  const todos = JSON.parse(fs.readFileSync("./src/database/todos.json", "utf8"));
   if (todos.find((todo) => todo.name === data.name)) throw new Error("Existed to do");
   fs.writeFileSync(
     "./src/database/todos.json",
@@ -12,11 +14,17 @@ const add = (data) => {
   );
 };
 const deleteOne = (id) => {
+  const todos = JSON.parse(fs.readFileSync("./src/database/todos.json", "utf8"));
   const updatedTodos = todos.filter((todo) => todo.id !== parseInt(id));
   fs.writeFileSync("./src/database/todos.json", JSON.stringify(updatedTodos));
 };
+const deleteMany = (idList) => {
+  const todos = JSON.parse(fs.readFileSync("./src/database/todos.json", "utf8"));
+  const updatedTodos = todos.filter((todo) => !idList.includes(todo.id));
+  fs.writeFileSync("./src/database/todos.json", JSON.stringify(updatedTodos));
+};
 const update = (data, id) => {
-  console.log(data, id);
+  const todos = JSON.parse(fs.readFileSync("./src/database/todos.json", "utf8"));
   const todotoupdate = todos.find((todo) => todo.id === parseInt(id));
   if (!todotoupdate) throw new Error("Id not exist");
   const updatedTodos = todos.map((todo) =>
@@ -24,4 +32,11 @@ const update = (data, id) => {
   );
   fs.writeFileSync("./src/database/todos.json", JSON.stringify(updatedTodos));
 };
-module.exports = { getAll, add, deleteOne, update };
+const completeAll = (idList) => {
+  const todos = JSON.parse(fs.readFileSync("./src/database/todos.json", "utf8"));
+  const updatedTodos = todos.map((todo) =>
+    idList.includes(todo.id) ? { ...todo, isCompleted: true } : todo
+  );
+  fs.writeFileSync("./src/database/todos.json", JSON.stringify(updatedTodos));
+};
+module.exports = { getAll, add, deleteOne, deleteMany, update, completeAll };

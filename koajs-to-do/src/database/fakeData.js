@@ -4,11 +4,11 @@ const { faker } = require("@faker-js/faker");
 const generateTodos = () => {
   const todos = [];
 
-  for (let i = 1; i <= 10; i++) {
+  for (let i = 1; i <= 30; i++) {
     const todo = {
       id: i,
       name: faker.lorem.sentence(),
-      isCompleted: faker.datatype.boolean(),
+      isCompleted: false,
     };
     todos.push(todo);
   }

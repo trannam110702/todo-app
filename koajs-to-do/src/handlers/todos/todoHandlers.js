@@ -2,6 +2,8 @@ const {
   getAll: getAllTodos,
   add: addTodo,
   deleteOne,
+  deleteMany,
+  completeAll,
   update: updateTodo,
 } = require("../../database/todoRepository");
 
@@ -49,8 +51,23 @@ const deleteOneTodo = (ctx) => {
     });
   }
 };
+const deleteManyTodoes = (ctx) => {
+  try {
+    deleteMany(ctx.request.body.idList);
+    ctx.status = 201;
+    return (ctx.body = {
+      success: true,
+    });
+  } catch (e) {
+    return (ctx.body = {
+      success: false,
+      error: e.message,
+    });
+  }
+};
 const update = (ctx) => {
   try {
+    console.log(ctx.request.body);
     updateTodo(ctx.request.body, ctx.request.params.id);
     ctx.status = 201;
     return (ctx.body = {
@@ -63,4 +80,19 @@ const update = (ctx) => {
     });
   }
 };
-module.exports = { getTodos, save, deleteOneTodo, update };
+const completeAllTodoes = (ctx) => {
+  try {
+    completeAll(ctx.request.body.idList);
+    ctx.status = 201;
+    return (ctx.body = {
+      success: true,
+    });
+  } catch (e) {
+    return (ctx.body = {
+      success: false,
+      error: e.message,
+    });
+  }
+};
+
+module.exports = { getTodos, save, deleteOneTodo, deleteManyTodoes, update, completeAllTodoes };
