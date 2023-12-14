@@ -4,8 +4,12 @@
   align-items: center;
   gap: var(--p-space-200);
 }
-.with-1000 {
-  max-width: var(--p-space-1000);
+.width-1000 {
+  width: var(--p-space-1000);
+}
+.wrap {
+  word-break: break-all;
+  white-space: normal;
 }
 .Polaris-TopBar-Menu__Activator--userMenu {
   padding: var(--p-space-200);

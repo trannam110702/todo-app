@@ -18,7 +18,7 @@ import useFetchTodoes from "../../hooks/useFetchTodoes";
 import "./style.css";
 
 const Home = () => {
-  const { todoes, loading, fetchAllTodos } = useFetchTodoes();
+  const { todoes, loading, setLoading, fetchAllTodos } = useFetchTodoes();
   const [addModal, setAddModal] = useState(false);
   const [todoModalData, setTodoModalData] = useState({});
   const { selectedResources, allResourcesSelected, handleSelectionChange, clearSelection } =
@@ -35,6 +35,7 @@ const Home = () => {
   }, []);
   const deteleTodo = useCallback(async (id) => {
     try {
+      setLoading(true);
       await fetchTodoApi(`todo/${id}`, {
         method: "DELETE",
       });
@@ -44,6 +45,7 @@ const Home = () => {
   }, []);
   const handleAdd = useCallback(async () => {
     if (todoModalData.name) {
+      setLoading(true);
       try {
         await fetchTodoApi(`todo`, {
           method: "POST",
@@ -62,6 +64,7 @@ const Home = () => {
         content: "Complete all",
         onAction: async () => {
           try {
+            setLoading(true);
             await fetchTodoApi(`todoes`, {
               method: "PUT",
               body: JSON.stringify({ idList: selectedResources }),
@@ -75,6 +78,7 @@ const Home = () => {
         content: "Delete all",
         onAction: async () => {
           try {
+            setLoading(true);
             await fetchTodoApi(`todoes/delete`, {
               method: "POST",
               body: JSON.stringify({ idList: selectedResources }),
@@ -155,7 +159,9 @@ const Home = () => {
                     <Text>{id}</Text>
                   </IndexTable.Cell>
                   <IndexTable.Cell>
-                    <Text>{name}</Text>
+                    <div className="wrap">
+                      <Text>{name}</Text>
+                    </div>
                   </IndexTable.Cell>
                   <IndexTable.Cell>
                     <div className="action-group">
