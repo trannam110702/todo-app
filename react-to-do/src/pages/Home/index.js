@@ -162,7 +162,7 @@ const Home = () => {
                       <TodoStatusLabel isCompleted={isCompleted} />
                     </div>
                   </IndexTable.Cell>
-                  <IndexTable.Cell className="max-with-1000">
+                  <IndexTable.Cell className="width-1000">
                     <div className="action-group ">
                       {isCompleted ? (
                         <Button

@@ -4,7 +4,7 @@
   align-items: center;
   gap: var(--p-space-200);
 }
-.max-with-1000 {
+.with-1000 {
   max-width: var(--p-space-1000);
 }
 .Polaris-TopBar-Menu__Activator--userMenu {
