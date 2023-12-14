@@ -8,6 +8,7 @@
   width: var(--p-space-1000);
 }
 .wrap {
+  min-width: 500px;
   word-break: break-all;
   white-space: normal;
 }
