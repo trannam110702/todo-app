@@ -1,0 +1,20 @@
+.action-group {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  gap: var(--p-space-200);
+}
+.width-1000 {
+  width: var(--p-space-1000);
+}
+.wrap {
+  min-width: 500px;
+  word-break: break-all;
+  white-space: normal;
+}
+.Polaris-TopBar-Menu__Activator--userMenu {
+  padding: var(--p-space-200);
+}
+.Polaris-IndexTable__TableRow {
+  cursor: default;
+}
