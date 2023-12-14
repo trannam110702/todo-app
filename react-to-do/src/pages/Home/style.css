@@ -4,9 +4,6 @@
   align-items: center;
   gap: var(--p-space-200);
 }
-.max-width-90 {
-  max-width: 90px;
-}
 .Polaris-TopBar-Menu__Activator--userMenu {
   padding: var(--p-space-200);
 }

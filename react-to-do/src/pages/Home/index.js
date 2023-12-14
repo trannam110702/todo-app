@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import {
   Page,
   Layout,
@@ -14,116 +14,79 @@ import {
 } from "@shopify/polaris";
 import TodoStatusLabel from "./components/TodoStatusLabel";
 import fetchTodoApi from "../../api/todoApi";
+import useFetchTodoes from "../../hooks/useFetchTodoes";
 import "./style.css";
 
 const Home = () => {
-  const [todoes, setTodoes] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { todoes, loading, fetchAllTodos } = useFetchTodoes();
   const [addModal, setAddModal] = useState(false);
   const [todoModalData, setTodoModalData] = useState({});
   const { selectedResources, allResourcesSelected, handleSelectionChange, clearSelection } =
     useIndexResourceState(todoes);
-  const fetchAllTodos = useCallback(async () => {
-    try {
-      const res = await fetchTodoApi("todoes");
-      if (res.ok) {
-        const data = (await res.json()).data;
-        setTodoes(data);
-      }
-    } catch (error) {
-    } finally {
-      clearSelection();
-      setLoading(false);
-    }
-  }, []);
   const updateTodo = useCallback(async (id) => {
-    setLoading(true);
     try {
-      const updateRes = await fetchTodoApi(`todo/${id}`, {
+      await fetchTodoApi(`todo/${id}`, {
         method: "PUT",
         body: JSON.stringify({ isCompleted: true }),
       });
-      if (updateRes.ok) {
-        await fetchAllTodos();
-      }
-    } catch (error) {
-      setLoading(false);
-    }
+      await fetchAllTodos();
+    } catch (error) {}
+    clearSelection();
   }, []);
   const deteleTodo = useCallback(async (id) => {
-    setLoading(true);
     try {
-      const deteleRes = await fetchTodoApi(`todo/${id}`, {
+      await fetchTodoApi(`todo/${id}`, {
         method: "DELETE",
       });
-      if (deteleRes.ok) {
-        await fetchAllTodos();
-      }
-    } catch (error) {
-      setLoading(false);
-    }
+      await fetchAllTodos();
+    } catch (error) {}
+    clearSelection();
   }, []);
   const handleAdd = useCallback(async () => {
-    setLoading(true);
     if (todoModalData.name) {
       try {
-        const res = await fetchTodoApi(`todo`, {
+        await fetchTodoApi(`todo`, {
           method: "POST",
           body: JSON.stringify({ name: todoModalData.name }),
         });
-        if (res.ok) {
-          await fetchAllTodos();
-        }
+        await fetchAllTodos();
       } catch (error) {}
     }
+    clearSelection();
     setTodoModalData({});
     setAddModal(false);
-    setLoading(false);
   }, [todoModalData]);
   const promotedBulkActions = useMemo(
     () => [
       {
         content: "Complete all",
         onAction: async () => {
-          setLoading(true);
           try {
-            const deteleRes = await fetchTodoApi(`todoes`, {
+            await fetchTodoApi(`todoes`, {
               method: "PUT",
               body: JSON.stringify({ idList: selectedResources }),
             });
-            if (deteleRes.ok) {
-              await fetchAllTodos();
-            }
-          } catch (error) {
-            setLoading(false);
-          }
+            await fetchAllTodos();
+          } catch (error) {}
+          clearSelection();
         },
       },
       {
         content: "Delete all",
         onAction: async () => {
-          setLoading(true);
           try {
-            const deteleRes = await fetchTodoApi(`todoes/delete`, {
+            await fetchTodoApi(`todoes/delete`, {
               method: "POST",
               body: JSON.stringify({ idList: selectedResources }),
             });
-            if (deteleRes.ok) {
-              await fetchAllTodos();
-            }
-          } catch (error) {
-            setLoading(false);
-          }
+            await fetchAllTodos();
+          } catch (error) {}
+          clearSelection();
         },
       },
     ],
     [selectedResources]
   );
-
-  useEffect(() => {
-    fetchAllTodos();
-  }, []);
-
   return (
     <Page
       title="Todoes"
