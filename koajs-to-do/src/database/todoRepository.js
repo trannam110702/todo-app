@@ -10,7 +10,20 @@ const add = (data) => {
   if (todos.find((todo) => todo.name === data.name)) throw new Error("Existed to do");
   fs.writeFileSync(
     "./src/database/todos.json",
-    JSON.stringify([...todos, { id: todos.length + 1, ...data, isCompleted: false }])
+    JSON.stringify([
+      ...todos,
+      {
+        id:
+          todos.length === 0
+            ? 1
+            : Math.max.apply(
+                null,
+                todos.map((item) => item.id)
+              ) + 1,
+        ...data,
+        isCompleted: false,
+      },
+    ])
   );
 };
 const deleteOne = (id) => {

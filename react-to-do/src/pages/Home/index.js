@@ -23,11 +23,11 @@ const Home = () => {
   const [todoModalData, setTodoModalData] = useState({});
   const { selectedResources, allResourcesSelected, handleSelectionChange, clearSelection } =
     useIndexResourceState(todoes);
-  const updateTodo = useCallback(async (id) => {
+  const updateTodo = useCallback(async (id, isCompleted) => {
     try {
       await fetchTodoApi(`todo/${id}`, {
         method: "PUT",
-        body: JSON.stringify({ isCompleted: true }),
+        body: JSON.stringify({ isCompleted }),
       });
       await fetchAllTodos();
     } catch (error) {}
@@ -47,7 +47,7 @@ const Home = () => {
       try {
         await fetchTodoApi(`todo`, {
           method: "POST",
-          body: JSON.stringify({ name: todoModalData.name }),
+          body: JSON.stringify({ name: todoModalData.name.trim() }),
         });
         await fetchAllTodos();
       } catch (error) {}
@@ -135,13 +135,13 @@ const Home = () => {
         <Layout.Section variant="fullWidth">
           <Card padding={0}>
             <IndexTable
-              headings={[{ title: "Id" }, { title: "Name" }, { title: "" }]}
+              headings={[{ title: "Id" }, { title: "Name" }, { title: "" }, { title: "" }]}
               itemCount={todoes.length}
               onSelectionChange={handleSelectionChange}
               selectedItemsCount={allResourcesSelected ? "All" : selectedResources.length}
               promotedBulkActions={promotedBulkActions}
               loading={loading}
-              lastColumnSticky
+              // lastColumnSticky
             >
               {todoes.map(({ id, name, isCompleted }, index) => (
                 <IndexTable.Row
@@ -157,25 +157,41 @@ const Home = () => {
                   <IndexTable.Cell>
                     <Text>{name}</Text>
                   </IndexTable.Cell>
-                  <IndexTable.Cell className="action-group">
-                    <TodoStatusLabel isCompleted={isCompleted} />
-                    <Button
-                      onClick={() => {
-                        updateTodo(id);
-                      }}
-                      disabled={isCompleted}
-                    >
-                      Complete
-                    </Button>
-                    <Button
-                      variant="primary"
-                      tone="critical"
-                      onClick={() => {
-                        deteleTodo(id);
-                      }}
-                    >
-                      Delete
-                    </Button>
+                  <IndexTable.Cell>
+                    <div className="action-group">
+                      <TodoStatusLabel isCompleted={isCompleted} />
+                    </div>
+                  </IndexTable.Cell>
+                  <IndexTable.Cell className="max-with-1000">
+                    <div className="action-group ">
+                      {isCompleted ? (
+                        <Button
+                          onClick={() => {
+                            updateTodo(id, false);
+                          }}
+                        >
+                          Undo
+                        </Button>
+                      ) : (
+                        <Button
+                          onClick={() => {
+                            updateTodo(id, true);
+                          }}
+                        >
+                          Complete
+                        </Button>
+                      )}
+
+                      <Button
+                        variant="primary"
+                        tone="critical"
+                        onClick={() => {
+                          deteleTodo(id);
+                        }}
+                      >
+                        Delete
+                      </Button>
+                    </div>
                   </IndexTable.Cell>
                 </IndexTable.Row>
               ))}
