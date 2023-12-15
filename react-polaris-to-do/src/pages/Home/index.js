@@ -80,7 +80,12 @@ const Home = () => {
         <Layout.Section variant="fullWidth">
           <Card padding={0}>
             <IndexTable
-              headings={[{ title: "Id" }, { title: "Name" }, { title: "" }, { title: "" }]}
+              headings={[
+                { title: "Id" },
+                { title: "Name" },
+                { title: "Status", alignment: "center" },
+                { title: "Action", alignment: "center" },
+              ]}
               itemCount={todoes.length}
               onSelectionChange={handleSelectionChange}
               selectedItemsCount={allResourcesSelected ? "All" : selectedResources.length}

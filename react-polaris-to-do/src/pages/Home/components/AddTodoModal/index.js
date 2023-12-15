@@ -10,10 +10,14 @@ const AddTodoModal = ({ addModal, setAddModal, fetchAllTodos }) => {
       return setValidate({ name: "Không được trống" });
     if (todoModalData.name) {
       try {
-        await fetchTodoApi(`todo`, {
+        const res = await fetchTodoApi(`todo`, {
           method: "POST",
           body: JSON.stringify({ name: todoModalData.name.trim() }),
         });
+        const resData = await res.json();
+        if (!resData?.success) {
+          console.log(resData?.error);
+        }
         await fetchAllTodos();
       } catch (error) {}
     }
