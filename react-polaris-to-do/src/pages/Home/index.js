@@ -7,12 +7,9 @@ import {
   useIndexResourceState,
   Button,
   Card,
-  Modal,
-  Form,
-  FormLayout,
-  TextField,
 } from "@shopify/polaris";
 import TodoStatusLabel from "./components/TodoStatusLabel";
+import AddTodoModal from "./components/AddTodoModal";
 import fetchTodoApi from "../../api/todoApi";
 import useFetchTodoes from "../../hooks/useFetchTodoes";
 import "./style.css";
@@ -20,77 +17,54 @@ import "./style.css";
 const Home = () => {
   const { todoes, loading, setLoading, fetchAllTodos } = useFetchTodoes();
   const [addModal, setAddModal] = useState(false);
-  const [todoModalData, setTodoModalData] = useState({});
+
   const { selectedResources, allResourcesSelected, handleSelectionChange, clearSelection } =
     useIndexResourceState(todoes);
-  const updateTodo = useCallback(async (id, isCompleted) => {
+
+  const updateTodo = useCallback(async (idList, isCompleted) => {
     try {
-      await fetchTodoApi(`todo/${id}`, {
+      setLoading(true);
+      await fetchTodoApi(`todoes`, {
         method: "PUT",
-        body: JSON.stringify({ isCompleted }),
+        body: JSON.stringify({
+          idList: typeof idList === "number" ? [idList] : idList,
+          isCompleted,
+        }),
       });
       await fetchAllTodos();
     } catch (error) {}
     clearSelection();
   }, []);
-  const deteleTodo = useCallback(async (id) => {
+  const deteleTodo = useCallback(async (idList) => {
     try {
       setLoading(true);
-      await fetchTodoApi(`todo/${id}`, {
-        method: "DELETE",
+      await fetchTodoApi(`todoes/delete`, {
+        method: "POST",
+        body: JSON.stringify({ idList: typeof idList === "number" ? [idList] : idList }),
       });
       await fetchAllTodos();
     } catch (error) {}
     clearSelection();
   }, []);
-  const handleAdd = useCallback(async () => {
-    if (todoModalData.name) {
-      setLoading(true);
-      try {
-        await fetchTodoApi(`todo`, {
-          method: "POST",
-          body: JSON.stringify({ name: todoModalData.name.trim() }),
-        });
-        await fetchAllTodos();
-      } catch (error) {}
-    }
-    clearSelection();
-    setTodoModalData({});
-    setAddModal(false);
-  }, [todoModalData]);
+
   const promotedBulkActions = useMemo(
     () => [
       {
         content: "Complete all",
-        onAction: async () => {
-          try {
-            setLoading(true);
-            await fetchTodoApi(`todoes`, {
-              method: "PUT",
-              body: JSON.stringify({ idList: selectedResources }),
-            });
-            await fetchAllTodos();
-          } catch (error) {}
-          clearSelection();
+        onAction: () => {
+          updateTodo(selectedResources, true);
         },
       },
       {
         content: "Delete all",
-        onAction: async () => {
-          try {
-            setLoading(true);
-            await fetchTodoApi(`todoes/delete`, {
-              method: "POST",
-              body: JSON.stringify({ idList: selectedResources }),
-            });
-            await fetchAllTodos();
-          } catch (error) {}
-          clearSelection();
+        onAction: () => {
+          deteleTodo(selectedResources);
         },
       },
     ],
     [selectedResources]
   );
+
   return (
     <Page
       title="Todoes"
@@ -101,40 +75,7 @@ const Home = () => {
         },
       }}
     >
-      <Modal
-        open={addModal}
-        onClose={() => {
-          setAddModal(false);
-        }}
-        title="Create a new to do"
-        primaryAction={{
-          content: "Create",
-          onAction: handleAdd,
-        }}
-        secondaryActions={[
-          {
-            content: "Cancel",
-            onAction: () => {
-              setTodoModalData({});
-              setAddModal(false);
-            },
-          },
-        ]}
-      >
-        <Modal.Section>
-          <Form>
-            <FormLayout>
-              <TextField
-                value={todoModalData.name}
-                onChange={(newValue) => setTodoModalData({ name: newValue })}
-                label="To do name"
-                autoComplete="off"
-                requiredIndicator
-              />
-            </FormLayout>
-          </Form>
-        </Modal.Section>
-      </Modal>
+      <AddTodoModal addModal={addModal} setAddModal={setAddModal} fetchAllTodos={fetchAllTodos} />
       <Layout>
         <Layout.Section variant="fullWidth">
           <Card padding={0}>
@@ -145,7 +86,6 @@ const Home = () => {
               selectedItemsCount={allResourcesSelected ? "All" : selectedResources.length}
               promotedBulkActions={promotedBulkActions}
               loading={loading}
-              // lastColumnSticky
             >
               {todoes.map(({ id, name, isCompleted }, index) => (
                 <IndexTable.Row
@@ -176,7 +116,7 @@ const Home = () => {
                             updateTodo(id, false);
                           }}
                         >
-                          Undo
+                          Uncomplete
                         </Button>
                       ) : (
                         <Button

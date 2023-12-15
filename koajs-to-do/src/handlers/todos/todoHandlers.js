@@ -3,7 +3,7 @@ const {
   add: addTodo,
   deleteOne,
   deleteMany,
-  completeAll,
+  updateAll,
   update: updateTodo,
 } = require("../../database/todoRepository");
 
@@ -80,9 +80,9 @@ const update = (ctx) => {
     });
   }
 };
-const completeAllTodoes = (ctx) => {
+const updateAllTodoes = (ctx) => {
   try {
-    completeAll(ctx.request.body.idList);
+    updateAll(ctx.request.body);
     ctx.status = 201;
     return (ctx.body = {
       success: true,
@@ -95,4 +95,4 @@ const completeAllTodoes = (ctx) => {
   }
 };
 
-module.exports = { getTodos, save, deleteOneTodo, deleteManyTodoes, update, completeAllTodoes };
+module.exports = { getTodos, save, deleteOneTodo, deleteManyTodoes, update, updateAllTodoes };

@@ -45,11 +45,11 @@ const update = (data, id) => {
   );
   fs.writeFileSync("./src/database/todos.json", JSON.stringify(updatedTodos));
 };
-const completeAll = (idList) => {
+const updateAll = ({ idList, isCompleted }) => {
   const todos = JSON.parse(fs.readFileSync("./src/database/todos.json", "utf8"));
   const updatedTodos = todos.map((todo) =>
-    idList.includes(todo.id) ? { ...todo, isCompleted: true } : todo
+    idList.includes(todo.id) ? { ...todo, isCompleted } : todo
   );
   fs.writeFileSync("./src/database/todos.json", JSON.stringify(updatedTodos));
 };
-module.exports = { getAll, add, deleteOne, deleteMany, update, completeAll };
+module.exports = { getAll, add, deleteOne, deleteMany, update, updateAll };
