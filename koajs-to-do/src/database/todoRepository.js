@@ -1,11 +1,18 @@
 const fs = require("fs");
-const path = require("path");
 
+const fakeTiming = (time) => {
+  const start = Date.now();
+  while (Date.now() - start < time) {
+    // do nothing in 1s
+  }
+};
 const getAll = () => {
+  fakeTiming(1000);
   const todos = JSON.parse(fs.readFileSync("./src/database/todos.json", "utf8"));
   return todos;
 };
 const add = (data) => {
+  fakeTiming(100);
   const todos = JSON.parse(fs.readFileSync("./src/database/todos.json", "utf8"));
   if (todos.find((todo) => todo.name === data.name)) throw new Error("Existed to do");
   fs.writeFileSync(
@@ -32,6 +39,8 @@ const deleteOne = (id) => {
   fs.writeFileSync("./src/database/todos.json", JSON.stringify(updatedTodos));
 };
 const deleteMany = (idList) => {
+  fakeTiming(100);
+
   const todos = JSON.parse(fs.readFileSync("./src/database/todos.json", "utf8"));
   const updatedTodos = todos.filter((todo) => !idList.includes(todo.id));
   fs.writeFileSync("./src/database/todos.json", JSON.stringify(updatedTodos));
@@ -46,6 +55,7 @@ const update = (data, id) => {
   fs.writeFileSync("./src/database/todos.json", JSON.stringify(updatedTodos));
 };
 const updateAll = ({ idList, isCompleted }) => {
+  fakeTiming(100);
   const todos = JSON.parse(fs.readFileSync("./src/database/todos.json", "utf8"));
   const updatedTodos = todos.map((todo) =>
     idList.includes(todo.id) ? { ...todo, isCompleted } : todo

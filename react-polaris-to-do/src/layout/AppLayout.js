@@ -1,5 +1,5 @@
-import { TopBar, Icon, Frame, Text } from "@shopify/polaris";
-import { ArrowLeftMinor, QuestionMarkMajor } from "@shopify/polaris-icons";
+import { TopBar, Frame } from "@shopify/polaris";
+import { ArrowLeftMinor } from "@shopify/polaris-icons";
 import { useState, useCallback } from "react";
 import "./style.css";
 function AppLayout({ children }) {

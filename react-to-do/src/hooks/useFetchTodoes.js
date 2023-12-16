@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import fetchTodoApi from "../api/todoApi";
 const useFetchTodoes = () => {
-  const [todoes, setTodoes] = useState([]);
+  const [todoes, setTodoes] = useState(null);
   const [loading, setLoading] = useState(true);
   const fetchAllTodos = useCallback(async () => {
     try {
@@ -19,13 +19,7 @@ const useFetchTodoes = () => {
   useEffect(() => {
     fetchAllTodos();
   }, []);
-  return {
-    todoes,
-    setTodoes,
-    loading,
-    setLoading,
-    fetchAllTodos,
-  };
+  return { todoes, setTodoes, loading, setLoading, fetchAllTodos };
 };
 
 export default useFetchTodoes;

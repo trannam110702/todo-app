@@ -8,6 +8,7 @@ import {
   Button,
   Card,
 } from "@shopify/polaris";
+import Loading from "../../components/Loading";
 import TodoStatusLabel from "./components/TodoStatusLabel";
 import AddTodoModal from "./components/AddTodoModal";
 import fetchTodoApi from "../../api/todoApi";
@@ -79,74 +80,77 @@ const Home = () => {
       <Layout>
         <Layout.Section variant="fullWidth">
           <Card padding={0}>
-            <IndexTable
-              headings={[
-                { title: "Id" },
-                { title: "Name" },
-                { title: "Status", alignment: "center" },
-                { title: "Action", alignment: "center" },
-              ]}
-              itemCount={todoes.length}
-              onSelectionChange={handleSelectionChange}
-              selectedItemsCount={allResourcesSelected ? "All" : selectedResources.length}
-              promotedBulkActions={promotedBulkActions}
-              loading={loading}
-            >
-              {todoes.map(({ id, name, isCompleted }, index) => (
-                <IndexTable.Row
-                  id={id}
-                  key={id}
-                  selected={selectedResources.includes(id)}
-                  position={index}
-                  onClick={() => {}}
-                >
-                  <IndexTable.Cell>
-                    <Text>{id}</Text>
-                  </IndexTable.Cell>
-                  <IndexTable.Cell>
-                    <div className="wrap">
-                      <Text>{name}</Text>
-                    </div>
-                  </IndexTable.Cell>
-                  <IndexTable.Cell>
-                    <div className="action-group">
-                      <TodoStatusLabel isCompleted={isCompleted} />
-                    </div>
-                  </IndexTable.Cell>
-                  <IndexTable.Cell className="width-1000">
-                    <div className="action-group ">
-                      {isCompleted ? (
-                        <Button
-                          onClick={() => {
-                            updateTodo(id, false);
-                          }}
-                        >
-                          Uncomplete
-                        </Button>
-                      ) : (
-                        <Button
-                          onClick={() => {
-                            updateTodo(id, true);
-                          }}
-                        >
-                          Complete
-                        </Button>
-                      )}
+            {loading ? (
+              <Loading />
+            ) : (
+              <IndexTable
+                headings={[
+                  { title: "Id" },
+                  { title: "Name" },
+                  { title: "Status", alignment: "center" },
+                  { title: "Action", alignment: "center" },
+                ]}
+                itemCount={todoes.length}
+                onSelectionChange={handleSelectionChange}
+                selectedItemsCount={allResourcesSelected ? "All" : selectedResources.length}
+                promotedBulkActions={promotedBulkActions}
+              >
+                {todoes.map(({ id, name, isCompleted }, index) => (
+                  <IndexTable.Row
+                    id={id}
+                    key={id}
+                    selected={selectedResources.includes(id)}
+                    position={index}
+                    onClick={() => {}}
+                  >
+                    <IndexTable.Cell>
+                      <Text>{id}</Text>
+                    </IndexTable.Cell>
+                    <IndexTable.Cell>
+                      <div className="wrap">
+                        <Text>{name}</Text>
+                      </div>
+                    </IndexTable.Cell>
+                    <IndexTable.Cell>
+                      <div className="action-group">
+                        <TodoStatusLabel isCompleted={isCompleted} />
+                      </div>
+                    </IndexTable.Cell>
+                    <IndexTable.Cell className="width-1000">
+                      <div className="action-group ">
+                        {isCompleted ? (
+                          <Button
+                            onClick={() => {
+                              updateTodo(id, false);
+                            }}
+                          >
+                            Uncomplete
+                          </Button>
+                        ) : (
+                          <Button
+                            onClick={() => {
+                              updateTodo(id, true);
+                            }}
+                          >
+                            Complete
+                          </Button>
+                        )}
 
-                      <Button
-                        variant="primary"
-                        tone="critical"
-                        onClick={() => {
-                          deteleTodo(id);
-                        }}
-                      >
-                        Delete
-                      </Button>
-                    </div>
-                  </IndexTable.Cell>
-                </IndexTable.Row>
-              ))}
-            </IndexTable>
+                        <Button
+                          variant="primary"
+                          tone="critical"
+                          onClick={() => {
+                            deteleTodo(id);
+                          }}
+                        >
+                          Delete
+                        </Button>
+                      </div>
+                    </IndexTable.Cell>
+                  </IndexTable.Row>
+                ))}
+              </IndexTable>
+            )}
           </Card>
         </Layout.Section>
       </Layout>
