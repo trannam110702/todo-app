@@ -6,11 +6,13 @@ const fakeTiming = (time) => {
     // do nothing in 1s
   }
 };
+
 const getAll = () => {
   fakeTiming(1000);
   const todos = JSON.parse(fs.readFileSync("./src/database/todos.json", "utf8"));
   return todos;
 };
+
 const add = (data) => {
   fakeTiming(100);
   const todos = JSON.parse(fs.readFileSync("./src/database/todos.json", "utf8"));
@@ -33,18 +35,21 @@ const add = (data) => {
     ])
   );
 };
+
 const deleteOne = (id) => {
   const todos = JSON.parse(fs.readFileSync("./src/database/todos.json", "utf8"));
   const updatedTodos = todos.filter((todo) => todo.id !== parseInt(id));
   fs.writeFileSync("./src/database/todos.json", JSON.stringify(updatedTodos));
 };
-const deleteMany = (idList) => {
+
+const deleteMany = (ids) => {
   fakeTiming(100);
 
   const todos = JSON.parse(fs.readFileSync("./src/database/todos.json", "utf8"));
-  const updatedTodos = todos.filter((todo) => !idList.includes(todo.id));
+  const updatedTodos = todos.filter((todo) => !ids.includes(todo.id));
   fs.writeFileSync("./src/database/todos.json", JSON.stringify(updatedTodos));
 };
+
 const update = (data, id) => {
   const todos = JSON.parse(fs.readFileSync("./src/database/todos.json", "utf8"));
   const todotoupdate = todos.find((todo) => todo.id === parseInt(id));
@@ -54,11 +59,12 @@ const update = (data, id) => {
   );
   fs.writeFileSync("./src/database/todos.json", JSON.stringify(updatedTodos));
 };
-const updateAll = ({ idList, isCompleted }) => {
+
+const updateAll = ({ ids, isCompleted }) => {
   fakeTiming(100);
   const todos = JSON.parse(fs.readFileSync("./src/database/todos.json", "utf8"));
   const updatedTodos = todos.map((todo) =>
-    idList.includes(todo.id) ? { ...todo, isCompleted } : todo
+    ids.includes(todo.id) ? { ...todo, isCompleted } : todo
   );
   fs.writeFileSync("./src/database/todos.json", JSON.stringify(updatedTodos));
 };

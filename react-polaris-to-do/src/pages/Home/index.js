@@ -22,13 +22,13 @@ const Home = () => {
   const { selectedResources, allResourcesSelected, handleSelectionChange, clearSelection } =
     useIndexResourceState(todoes);
 
-  const updateTodo = useCallback(async (idList, isCompleted) => {
+  const updateTodo = useCallback(async (ids, isCompleted) => {
     try {
       setLoading(true);
       await fetchTodoApi(`todoes`, {
         method: "PUT",
         body: JSON.stringify({
-          idList: typeof idList === "number" ? [idList] : idList,
+          ids: typeof ids === "number" ? [ids] : ids,
           isCompleted,
         }),
       });
@@ -36,12 +36,12 @@ const Home = () => {
     } catch (error) {}
     clearSelection();
   }, []);
-  const deteleTodo = useCallback(async (idList) => {
+  const deteleTodo = useCallback(async (ids) => {
     try {
       setLoading(true);
       await fetchTodoApi(`todoes/delete`, {
         method: "POST",
-        body: JSON.stringify({ idList: typeof idList === "number" ? [idList] : idList }),
+        body: JSON.stringify({ ids: typeof ids === "number" ? [ids] : ids }),
       });
       await fetchAllTodos();
     } catch (error) {}

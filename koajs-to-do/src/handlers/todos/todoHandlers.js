@@ -53,7 +53,7 @@ const deleteOneTodo = (ctx) => {
 };
 const deleteManyTodoes = (ctx) => {
   try {
-    deleteMany(ctx.request.body.idList);
+    deleteMany(ctx.request.body.ids);
     ctx.status = 201;
     return (ctx.body = {
       success: true,

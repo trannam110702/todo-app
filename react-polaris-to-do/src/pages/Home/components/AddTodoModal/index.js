@@ -18,10 +18,10 @@ const AddTodoModal = ({ addModal, setAddModal, fetchAllTodos }) => {
         if (!resData?.success) {
           console.log(resData?.error);
         }
+        setAddModal(false);
         await fetchAllTodos();
       } catch (error) {}
     }
-    setAddModal(false);
   }, [todoModalData]);
   useEffect(() => {
     setTodoModalData({});
@@ -49,13 +49,16 @@ const AddTodoModal = ({ addModal, setAddModal, fetchAllTodos }) => {
       ]}
     >
       <Modal.Section>
-        <Form>
+        <Form
+          onSubmit={() => {
+            handleAdd();
+          }}
+        >
           <FormLayout>
             <TextField
               value={todoModalData.name}
               onChange={(newValue) => setTodoModalData({ name: newValue })}
               label="To do name"
-              autoComplete="off"
               requiredIndicator
               error={todoModalData?.name?.trim() ? false : validate?.name}
             />

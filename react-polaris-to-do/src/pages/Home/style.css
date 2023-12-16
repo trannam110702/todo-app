@@ -1,6 +1,6 @@
 .action-group {
   display: flex;
-  justify-content: center;
+  justify-content: end;
   align-items: center;
   gap: var(--p-space-200);
 }
