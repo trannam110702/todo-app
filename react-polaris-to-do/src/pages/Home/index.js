@@ -1,3 +1,4 @@
+import "./style.css";
 import React, { useCallback, useMemo, useState } from "react";
 import {
   Page,
@@ -12,13 +13,16 @@ import Loading from "../../components/Loading";
 import TodoStatusLabel from "./components/TodoStatusLabel";
 import AddTodoModal from "./components/AddTodoModal";
 import fetchTodoApi from "../../api/todoApi";
-import useFetchTodoes from "../../hooks/useFetchTodoes";
-import "./style.css";
+import useFetchData from "../../hooks/useFetchData";
 
 const Home = () => {
-  const { todoes, loading, setLoading, fetchAllTodos } = useFetchTodoes();
+  const {
+    data: todoes,
+    fetchAllData: fetchAllTodos,
+    setLoading,
+    loading,
+  } = useFetchData({ endpoint: "todoes" });
   const [addModal, setAddModal] = useState(false);
-
   const { selectedResources, allResourcesSelected, handleSelectionChange, clearSelection } =
     useIndexResourceState(todoes);
 
@@ -39,8 +43,8 @@ const Home = () => {
   const deteleTodo = useCallback(async (ids) => {
     try {
       setLoading(true);
-      await fetchTodoApi(`todoes/delete`, {
-        method: "POST",
+      await fetchTodoApi(`todoes`, {
+        method: "DELETE",
         body: JSON.stringify({ ids: typeof ids === "number" ? [ids] : ids }),
       });
       await fetchAllTodos();

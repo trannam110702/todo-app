@@ -1,16 +1,16 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Modal, Form, FormLayout, TextField } from "@shopify/polaris";
-import fetchTodoApi from "../../../../api/todoApi";
+import fetchApi from "../../../../api/todoApi";
 
 const AddTodoModal = ({ addModal, setAddModal, fetchAllTodos }) => {
   const [todoModalData, setTodoModalData] = useState({});
   const [validate, setValidate] = useState({});
   const handleAdd = useCallback(async () => {
     if (!todoModalData?.name?.trim() || !todoModalData.name)
-      return setValidate({ name: "Không được trống" });
+      return setValidate({ name: "Please fill this field" });
     if (todoModalData.name) {
       try {
-        const res = await fetchTodoApi(`todo`, {
+        const res = await fetchApi(`todoes`, {
           method: "POST",
           body: JSON.stringify({ name: todoModalData.name.trim() }),
         });

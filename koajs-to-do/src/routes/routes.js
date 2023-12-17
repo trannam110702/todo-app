@@ -5,19 +5,15 @@ const {
   todoInputUpdateMiddleware,
 } = require("../middleware/todoInputMiddleware");
 
-// Prefix all routes with /todos
 const router = new Router({
   prefix: "/api",
 });
 
-// Routes will go here
-
 router.get("/todoes", todoHandler.getTodos);
-router.post("/todo", todoInputMiddleware, todoHandler.save);
-router.delete("/todo/:id", todoHandler.deleteOneTodo);
-router.post("/todoes/delete", todoHandler.deleteManyTodoes);
+router.post("/todoes", todoInputMiddleware, todoHandler.save);
 router.put("/todo/:id", todoInputUpdateMiddleware, todoHandler.update);
-router.put("/todoes", todoHandler.updateAllTodoes);
-// router.get("/todo/:id", todoHandler.gettodo);
+router.put("/todoes", todoHandler.updateManyTodoes);
+router.delete("/todo/:id", todoHandler.deleteOneTodo);
+router.delete("/todoes", todoHandler.deleteManyTodoes);
 
 module.exports = router;

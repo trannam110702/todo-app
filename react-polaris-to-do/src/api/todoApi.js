@@ -1,4 +1,4 @@
-async function fetchTodoApi(endpoint = "", option) {
+async function fetchApi(endpoint = "", option) {
   const baseUrl = "http://localhost:5000/api/";
   const defaultOption = {
     method: "GET", // *GET, POST, PUT, DELETE, etc.
@@ -12,6 +12,8 @@ async function fetchTodoApi(endpoint = "", option) {
     referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
   };
   const response = await fetch(baseUrl + endpoint, { ...defaultOption, ...option });
+  console.log("Url: " + baseUrl + endpoint);
+  console.log("Option: ", { ...option });
   return response;
 }
-export default fetchTodoApi;
+export default fetchApi;

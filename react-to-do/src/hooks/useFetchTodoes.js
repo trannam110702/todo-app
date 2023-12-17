@@ -9,6 +9,7 @@ const useFetchTodoes = () => {
       const res = await fetchTodoApi("todoes");
       if (res.ok) {
         const data = (await res.json()).data;
+        console.log(data);
         setTodoes(data);
       }
     } catch (error) {

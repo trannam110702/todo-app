@@ -6,7 +6,7 @@ const cors = require("@koa/cors");
 const app = new Koa();
 
 app.use(cors());
-app.use(koaBody.koaBody());
+app.use(koaBody.koaBody({ parsedMethods: ["POST", "PUT", "PATCH", "DELETE"] }));
 app.use(routes.routes());
 app.use(routes.allowedMethods());
 

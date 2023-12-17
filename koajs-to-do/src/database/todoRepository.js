@@ -44,7 +44,6 @@ const deleteOne = (id) => {
 
 const deleteMany = (ids) => {
   fakeTiming(100);
-
   const todos = JSON.parse(fs.readFileSync("./src/database/todos.json", "utf8"));
   const updatedTodos = todos.filter((todo) => !ids.includes(todo.id));
   fs.writeFileSync("./src/database/todos.json", JSON.stringify(updatedTodos));
@@ -60,7 +59,7 @@ const update = (data, id) => {
   fs.writeFileSync("./src/database/todos.json", JSON.stringify(updatedTodos));
 };
 
-const updateAll = ({ ids, isCompleted }) => {
+const updateMany = ({ ids, isCompleted }) => {
   fakeTiming(100);
   const todos = JSON.parse(fs.readFileSync("./src/database/todos.json", "utf8"));
   const updatedTodos = todos.map((todo) =>
@@ -68,4 +67,4 @@ const updateAll = ({ ids, isCompleted }) => {
   );
   fs.writeFileSync("./src/database/todos.json", JSON.stringify(updatedTodos));
 };
-module.exports = { getAll, add, deleteOne, deleteMany, update, updateAll };
+module.exports = { getAll, add, deleteOne, deleteMany, update, updateMany };
